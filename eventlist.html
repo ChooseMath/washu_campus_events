@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WashU Campus Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'washu-red': '#BA0C2F',
+                        'washu-green': '#215732',
+                        'washu-gray': '#3D3D3D',
+                        'washu-tan': '#E1C4AC'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gothic-pattern {
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .search-focus:focus {
+            border-color: #BA0C2F;
+            box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.1);
+        }
+        
+        .filter-tag {
+            transition: all 0.2s ease;
+        }
+        
+        .filter-tag:hover {
+            transform: translateY(-1px);
+        }
+        
+        .filter-tag.active {
+            background-color: #BA0C2F;
+            color: white;
+        }
+        
+        .filter-tag:not(.active) {
+            background-color: #f3f4f6;
+            color: #3D3D3D;
+        }
+        
+        .event-card {
+            border: 1px solid #E1C4AC;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            border-color: #BA0C2F;
+        }
+        
+        .view-details-btn {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .event-card:hover .view-details-btn {
+            opacity: 1;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header Section -->
+    <header class="bg-washu-red text-white py-16 relative overflow-hidden">
+        <div class="gothic-pattern absolute inset-0 opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">WashU Campus Events</h1>
+                <p class="text-xl md:text-2xl text-gray-100">Discover & Join Student Activities</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <div class="relative max-w-2xl mx-auto">
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search events by name, location, or keyword..."
+                    class="w-full px-6 py-4 pl-12 text-lg border-2 border-gray-300 rounded-full search-focus outline-none transition-all duration-300"
+                >
+                <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="mb-8">
+            <div class="flex flex-wrap justify-center gap-3">
+                <button class="filter-tag active px-6 py-2 rounded-full font-medium" data-filter="all">All Events</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="sports">Sports & Recreation</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="academic">Academic & Learning</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="social">Social & Networking</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="arts">Arts & Culture</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="outdoor">Outdoor Adventures</button>
+                <button class="filter-tag px-6 py-2 rounded-full font-medium" data-filter="wellness">Wellness & Fitness</button>
+            </div>
+        </div>
+
+        <!-- Events Grid -->
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Events will be populated by JavaScript -->
+        </div>
+
+        <!-- No Events Message -->
+        <div id="noEventsMessage" class="text-center py-12 hidden">
+            <div class="text-gray-500 text-lg">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <p>No events found matching your search criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample events data
+        const events = [
+            {
+                id: 1,
+                title: "Basketball Pickup Game",
+                category: "sports",
+                location: "Athletic Complex",
+                date: "2025-10-28",
+                time: "6:00 PM",
+                capacity: "15/25",
+                image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&h=225&fit=crop",
+                description: "Join fellow students for an evening of basketball at the Athletic Complex. All skill levels welcome!"
+            },
+            {
+                id: 2,
+                title: "AI & Machine Learning Workshop",
+                category: "academic",
+                location: "Lopata Hall",
+                date: "2025-10-30",
+                time: "2:00 PM",
+                capacity: "8/20",
+                image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=225&fit=crop",
+                description: "Learn the fundamentals of AI and machine learning with hands-on coding exercises."
+            },
+            {
+                id: 3,
+                title: "Brookings Hall Night Tour",
+                category: "arts",
+                location: "Brookings Hall",
+                date: "2025-11-01",
+                time: "7:30 PM",
+                capacity: "12/15",
+                image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=225&fit=crop",
+                description: "Explore the historic Brookings Hall after dark with our guided architectural tour."
+            },
+            {
+                id: 4,
+                title: "Coffee & Conversation",
+                category: "social",
+                location: "Danforth University Center",
+                date: "2025-11-03",
+                time: "10:00 AM",
+                capacity: "20/30",
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=225&fit=crop",
+                description: "Meet new people and discuss current events over coffee in the DUC."
+            },
+            {
+                id: 5,
+                title: "Forest Park Run Club",
+                category: "outdoor",
+                location: "Forest Park",
+                date: "2025-11-05",
+                time: "8:00 AM",
+                capacity: "18/25",
+                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=225&fit=crop",
+                description: "Join our weekly running group for a scenic jog through Forest Park."
+            },
+            {
+                id: 6,
+                title: "Art Gallery Opening",
+                category: "arts",
+                location: "Kemper Art Museum",
+                date: "2025-11-07",
+                time: "6:00 PM",
+                capacity: "25/40",
+                image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=225&fit=crop",
+                description: "Celebrate the opening of our new contemporary art exhibition."
+            },
+            {
+                id: 7,
+                title: "Study Abroad Info Session",
+                category: "academic",
+                location: "Umrath Hall",
+                date: "2025-11-09",
+                time: "3:00 PM",
+                capacity: "30/50",
+                image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=225&fit=crop",
+                description: "Learn about study abroad opportunities and application processes."
+            },
+            {
+                id: 8,
+                title: "Yoga on the Quad",
+                category: "wellness",
+                location: "Mudd Field",
+                date: "2025-11-11",
+                time: "5:30 PM",
+                capacity: "22/30",
+                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=225&fit=crop",
+                description: "Relax and unwind with outdoor yoga on the beautiful Mudd Field."
+            },
+            {
+                id: 9,
+                title: "Career Networking Mixer",
+                category: "social",
+                location: "Knight Hall",
+                date: "2025-11-13",
+                time: "5:00 PM",
+                capacity: "35/50",
+                image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=225&fit=crop",
+                description: "Connect with alumni and professionals in your field of interest."
+            },
+            {
+                id: 10,
+                title: "Movie Night",
+                category: "social",
+                location: "The Gargoyle",
+                date: "2025-11-15",
+                time: "8:00 PM",
+                capacity: "28/40",
+                image: "https://images.unsplash.com/photo-1489599808412-2a4b4a0a0a0a?w=400&h=225&fit=crop",
+                description: "Enjoy a classic film screening at The Gargoyle with free popcorn!"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Initialize the page
+        function init() {
+            renderEvents(events);
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-tag').forEach(button => {
+                button.addEventListener('click', handleFilter);
+            });
+        }
+
+        // Handle search input
+        function handleSearch(e) {
+            currentSearch = e.target.value.toLowerCase();
+            filterAndRenderEvents();
+        }
+
+        // Handle filter selection
+        function handleFilter(e) {
+            // Update active filter button
+            document.querySelectorAll('.filter-tag').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            currentFilter = e.target.dataset.filter;
+            filterAndRenderEvents();
+        }
+
+        // Filter and render events
+        function filterAndRenderEvents() {
+            let filteredEvents = events;
+
+            // Apply category filter
+            if (currentFilter !== 'all') {
+                filteredEvents = filteredEvents.filter(event => event.category === currentFilter);
+            }
+
+            // Apply search filter
+            if (currentSearch) {
+                filteredEvents = filteredEvents.filter(event => 
+                    event.title.toLowerCase().includes(currentSearch) ||
+                    event.location.toLowerCase().includes(currentSearch) ||
+                    event.description.toLowerCase().includes(currentSearch)
+                );
+            }
+
+            renderEvents(filteredEvents);
+        }
+
+        // Render events to the grid
+        function renderEvents(eventsToRender) {
+            const grid = document.getElementById('eventsGrid');
+            const noEventsMessage = document.getElementById('noEventsMessage');
+
+            if (eventsToRender.length === 0) {
+                grid.innerHTML = '';
+                noEventsMessage.classList.remove('hidden');
+                return;
+            }
+
+            noEventsMessage.classList.add('hidden');
+            
+            // Sort events by date
+            const sortedEvents = eventsToRender.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            grid.innerHTML = sortedEvents.map(event => createEventCard(event)).join('');
+            
+            // Add fade-in animation to new cards
+            setTimeout(() => {
+                document.querySelectorAll('.event-card').forEach(card => {
+                    card.classList.add('fade-in');
+                });
+            }, 100);
+        }
+
+        // Create event card HTML
+        function createEventCard(event) {
+            const eventDate = new Date(event.date);
+            const formattedDate = eventDate.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+
+            return `
+                <div class="event-card bg-white rounded-lg overflow-hidden shadow-md card-hover">
+                    <div class="relative">
+                        <img src="${event.image}" alt="${event.title}" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-washu-red text-white px-3 py-1 rounded-full text-sm font-medium">
+                            ${event.category.charAt(0).toUpperCase() + event.category.slice(1)}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-washu-red mb-3">${event.title}</h3>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 mr-2 text-washu-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span class="text-sm">${event.location}</span>
+                            </div>
+                            
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 mr-2 text-washu-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="text-sm">${formattedDate} at ${event.time}</span>
+                            </div>
+                            
+                            <div class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 mr-2 text-washu-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                <span class="text-sm">${event.capacity} registered</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">${event.description}</p>
+                        
+                        <button class="view-details-btn w-full bg-washu-red text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
