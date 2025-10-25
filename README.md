@@ -3,7 +3,7 @@
 A responsive web application for Washington University students to discover, search, and engage with campus activities.
 
 ## 🎯 Project Overview
-Built during HackWashu (Oct 2025), this platform aims to strengthen campus community connections by providing an intuitive interface for event discovery.
+Built during Hackathon (Oct 2025), this platform aims to strengthen campus community connections by providing an intuitive interface for event discovery.
 
 ## ✨ Key Features
 - **Smart Search**: Real-time filtering with keyword matching
