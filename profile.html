@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - WashU Campus Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'washu-red': '#BA0C2F',
+                        'washu-green': '#215732',
+                        'washu-gray': '#3D3D3D',
+                        'washu-tan': '#E1C4AC'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gothic-pattern {
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background-color: #BA0C2F;
+            color: white;
+        }
+        
+        .tab-button:not(.active) {
+            background-color: #f3f4f6;
+            color: #3D3D3D;
+        }
+        
+        .tab-button:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+        
+        .sub-tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .sub-tab-button.active {
+            background-color: #215732;
+            color: white;
+        }
+        
+        .sub-tab-button:not(.active) {
+            background-color: #f3f4f6;
+            color: #3D3D3D;
+        }
+        
+        .e-points-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .achievement-badge {
+            transition: all 0.3s ease;
+        }
+        
+        .achievement-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .event-card {
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chart-bar {
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar:hover {
+            transform: scaleY(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header Section -->
+    <header class="bg-washu-red text-white py-6 relative overflow-hidden">
+        <div class="gothic-pattern absolute inset-0 opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex justify-between items-center">
+                <button 
+                    onclick="window.location.href='eventlist.html'"
+                    class="flex items-center space-x-2 text-white hover:text-gray-200 transition-colors"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span>Back to Events</span>
+                </button>
+                <h1 class="text-xl font-bold">My Profile</h1>
+                <button 
+                    id="logoutBtn"
+                    class="text-white hover:text-gray-200 transition-colors"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- User Profile Section -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                <!-- User Avatar -->
+                <div class="w-24 h-24 bg-washu-red rounded-full flex items-center justify-center text-white text-3xl font-bold">
+                    J
+                </div>
+                
+                <!-- User Info -->
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-bold text-washu-gray mb-2">John Doe</h2>
+                    <p class="text-lg text-gray-600 mb-4">john.doe@wustl.edu</p>
+                    
+                    <!-- E-Points Score -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-8">
+                        <div class="text-center">
+                            <div class="e-points-badge inline-flex items-center space-x-2 px-6 py-3 rounded-full text-white font-bold text-2xl">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                </svg>
+                                <span>127</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">Your extrovert energy level!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="mb-8">
+            <div class="flex flex-wrap justify-center gap-2">
+                <button class="tab-button active px-6 py-3 rounded-lg font-medium" data-tab="stats">My Stats</button>
+                <button class="tab-button px-6 py-3 rounded-lg font-medium" data-tab="events">My Events</button>
+                <button class="tab-button px-6 py-3 rounded-lg font-medium" data-tab="achievements">Achievements</button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tabContent">
+            <!-- My Stats Tab -->
+            <div id="statsTab" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Stats Cards -->
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-washu-gray mb-4">Event Statistics</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Total Events Attended</span>
+                                    <span class="text-2xl font-bold text-washu-red">23</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Total Events Organized</span>
+                                    <span class="text-2xl font-bold text-washu-green">5</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">E-Points Earned</span>
+                                    <span class="text-2xl font-bold text-yellow-500">127</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-washu-gray mb-4">Recent Activity</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 bg-washu-green rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Attended Basketball Pickup Game (+1 E-Point)</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 bg-washu-red rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Organized Coffee & Conversation (+2 E-Points)</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-2 h-2 bg-washu-green rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Attended AI Workshop (+1 E-Point)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- E-Points Chart -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-washu-gray mb-4">E-Points History</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">This Month</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">15</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Last Month</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">12</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Two Months Ago</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">9</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Events Tab -->
+            <div id="eventsTab" class="tab-content hidden">
+                <!-- Sub-tabs for Events -->
+                <div class="mb-6">
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button class="sub-tab-button active px-4 py-2 rounded-lg font-medium" data-sub-tab="registered">Registered</button>
+                        <button class="sub-tab-button px-4 py-2 rounded-lg font-medium" data-sub-tab="organized">Organized</button>
+                        <button class="sub-tab-button px-4 py-2 rounded-lg font-medium" data-sub-tab="completed">Completed</button>
+                    </div>
+                </div>
+
+                <!-- Events Content -->
+                <div id="eventsContent">
+                    <!-- Registered Events -->
+                    <div id="registeredEvents" class="sub-tab-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="event-card bg-white rounded-lg shadow-md p-6 border border-washu-tan">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="bg-washu-red text-white px-3 py-1 rounded-full text-sm font-medium">Sports</span>
+                                    <span class="text-sm text-gray-500">Oct 28</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-washu-red mb-2">Basketball Pickup Game</h3>
+                                <p class="text-gray-600 text-sm mb-3">Athletic Complex</p>
+                                <p class="text-gray-500 text-sm">6:00 PM</p>
+                            </div>
+                            
+                            <div class="event-card bg-white rounded-lg shadow-md p-6 border border-washu-tan">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="bg-washu-green text-white px-3 py-1 rounded-full text-sm font-medium">Academic</span>
+                                    <span class="text-sm text-gray-500">Oct 30</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-washu-red mb-2">AI & Machine Learning Workshop</h3>
+                                <p class="text-gray-600 text-sm mb-3">Lopata Hall</p>
+                                <p class="text-gray-500 text-sm">2:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Organized Events -->
+                    <div id="organizedEvents" class="sub-tab-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="event-card bg-white rounded-lg shadow-md p-6 border border-washu-tan">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="bg-washu-green text-white px-3 py-1 rounded-full text-sm font-medium">Social</span>
+                                    <span class="text-sm text-gray-500">Nov 3</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-washu-red mb-2">Coffee & Conversation</h3>
+                                <p class="text-gray-600 text-sm mb-3">Danforth University Center</p>
+                                <p class="text-gray-500 text-sm">10:00 AM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Events -->
+                    <div id="completedEvents" class="sub-tab-content hidden">
+                        <div class="text-center py-12">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-gray-500 text-lg">No completed events yet</p>
+                            <p class="text-gray-400 text-sm">Events you've organized will appear here after completion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Tab -->
+            <div id="achievementsTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Achievement Badges -->
+                    <div class="achievement-badge bg-white rounded-lg shadow-lg p-6 text-center border-2 border-yellow-300">
+                        <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">First Event</h3>
+                        <p class="text-sm text-gray-600">Attended your first event</p>
+                    </div>
+
+                    <div class="achievement-badge bg-white rounded-lg shadow-lg p-6 text-center border-2 border-yellow-300">
+                        <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Social Butterfly</h3>
+                        <p class="text-sm text-gray-600">Attended 10 events</p>
+                    </div>
+
+                    <div class="achievement-badge bg-white rounded-lg shadow-lg p-6 text-center border-2 border-washu-red">
+                        <div class="w-16 h-16 bg-washu-red rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Event Organizer</h3>
+                        <p class="text-sm text-gray-600">Organized your first event</p>
+                    </div>
+
+                    <div class="achievement-badge bg-white rounded-lg shadow-lg p-6 text-center border-2 border-gray-300 opacity-50">
+                        <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-500 mb-2">E-Point Master</h3>
+                        <p class="text-sm text-gray-400">Earn 200 E-Points</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-12">
+            <button 
+                id="leaderboardBtn"
+                class="w-full sm:w-auto px-8 py-4 bg-washu-green text-white rounded-lg font-bold text-lg hover:bg-green-700 transition-colors shadow-lg"
+            >
+                View Leaderboard
+            </button>
+            <button 
+                id="logoutBtnBottom"
+                class="w-full sm:w-auto px-8 py-4 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors shadow-lg"
+            >
+                Logout
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // User data (in a real app, this would come from authentication)
+        const userData = {
+            name: "John Doe",
+            email: "john.doe@wustl.edu",
+            ePoints: 127,
+            eventsAttended: 23,
+            eventsOrganized: 5
+        };
+
+        // Initialize the page
+        function init() {
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Main tabs
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', handleTabClick);
+            });
+            
+            // Sub-tabs for events
+            document.querySelectorAll('.sub-tab-button').forEach(button => {
+                button.addEventListener('click', handleSubTabClick);
+            });
+            
+            // Bottom buttons
+            document.getElementById('leaderboardBtn').addEventListener('click', handleLeaderboard);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('logoutBtnBottom').addEventListener('click', handleLogout);
+        }
+
+        // Handle main tab clicks
+        function handleTabClick(e) {
+            const tabName = e.target.dataset.tab;
+            
+            // Update active tab button
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+        }
+
+        // Handle sub-tab clicks for events
+        function handleSubTabClick(e) {
+            const subTabName = e.target.dataset.subTab;
+            
+            // Update active sub-tab button
+            document.querySelectorAll('.sub-tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            // Hide all sub-tab content
+            document.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected sub-tab content
+            document.getElementById(`${subTabName}Events`).classList.remove('hidden');
+        }
+
+        // Handle leaderboard button
+        function handleLeaderboard() {
+            // In a real app, this would navigate to leaderboard page
+            alert('Leaderboard functionality would open a leaderboard page here.');
+        }
+
+        // Handle logout
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // In a real app, this would clear authentication and redirect
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

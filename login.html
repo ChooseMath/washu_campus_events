@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WashU Campus Events - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'washu-red': '#BA0C2F',
+                        'washu-green': '#215732',
+                        'washu-gray': '#3D3D3D',
+                        'washu-tan': '#E1C4AC'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gothic-pattern {
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #BA0C2F;
+            box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.1);
+        }
+        
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background-color: #ef4444; }
+        .strength-fair { background-color: #f59e0b; }
+        .strength-good { background-color: #10b981; }
+        .strength-strong { background-color: #059669; }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .error-message {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .success-message {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen flex items-center justify-center py-8">
+    <!-- Header Section -->
+    <header class="bg-washu-red text-white py-8 relative overflow-hidden mb-8 w-full">
+        <div class="gothic-pattern absolute inset-0 opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold">WashU Campus Events</h1>
+            <p class="text-lg text-gray-100 mt-2">Sign in to discover and join student activities</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 max-w-md">
+        <!-- Login Form -->
+        <div id="loginForm" class="bg-white rounded-lg shadow-lg p-8 fade-in">
+            <h2 class="text-2xl font-bold text-washu-gray mb-6 text-center">Sign In</h2>
+            
+            <form id="loginFormElement" class="space-y-6">
+                <!-- Email Input -->
+                <div>
+                    <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input 
+                        type="email" 
+                        id="loginEmail"
+                        placeholder="your.email@wustl.edu"
+                        class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg outline-none"
+                        required
+                    >
+                    <div id="loginEmailError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            class="form-input w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg outline-none"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            id="toggleLoginPassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="loginPasswordError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit"
+                    class="w-full bg-washu-red text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                >
+                    Sign In
+                </button>
+
+                <!-- Register Link -->
+                <div class="text-center">
+                    <p class="text-gray-600">
+                        Don't have an account? 
+                        <button id="showRegisterForm" class="text-washu-red hover:text-red-700 font-medium">
+                            Register here
+                        </button>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registerForm" class="bg-white rounded-lg shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-bold text-washu-gray mb-6 text-center">Create Account</h2>
+            
+            <form id="registerFormElement" class="space-y-6">
+                <!-- Email Input -->
+                <div>
+                    <label for="registerEmail" class="block text-sm font-medium text-gray-700 mb-2">WashU Email</label>
+                    <input 
+                        type="email" 
+                        id="registerEmail"
+                        placeholder="your.email@wustl.edu"
+                        class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg outline-none"
+                        required
+                    >
+                    <div id="registerEmailError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Verification Code -->
+                <div>
+                    <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                    <div class="flex space-x-2">
+                        <input 
+                            type="text" 
+                            id="verificationCode"
+                            placeholder="123456"
+                            maxlength="6"
+                            class="form-input flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg outline-none text-center text-lg tracking-widest"
+                        >
+                        <button 
+                            type="button" 
+                            id="sendCodeBtn"
+                            class="px-4 py-3 bg-washu-green text-white rounded-lg font-medium hover:bg-green-700 transition-colors whitespace-nowrap"
+                        >
+                            Send Code
+                        </button>
+                    </div>
+                    <div id="verificationError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="registerPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="registerPassword"
+                            placeholder="Create a strong password"
+                            class="form-input w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg outline-none"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            id="toggleRegisterPassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Password Strength Indicator -->
+                    <div class="mt-2">
+                        <div class="flex space-x-1">
+                            <div class="password-strength flex-1 bg-gray-200"></div>
+                            <div class="password-strength flex-1 bg-gray-200"></div>
+                            <div class="password-strength flex-1 bg-gray-200"></div>
+                            <div class="password-strength flex-1 bg-gray-200"></div>
+                        </div>
+                        <div id="passwordStrengthText" class="text-sm text-gray-500 mt-1"></div>
+                    </div>
+                    
+                    <div id="registerPasswordError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Confirm Password Input -->
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="confirmPassword"
+                            placeholder="Confirm your password"
+                            class="form-input w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg outline-none"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            id="toggleConfirmPassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="confirmPasswordError" class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- Complete Registration Button -->
+                <button 
+                    type="submit"
+                    class="w-full bg-washu-red text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                >
+                    Complete Registration
+                </button>
+
+                <!-- Back to Login Link -->
+                <div class="text-center">
+                    <p class="text-gray-600">
+                        Already have an account? 
+                        <button id="showLoginForm" class="text-washu-red hover:text-red-700 font-medium">
+                            Sign in here
+                        </button>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="bg-green-50 border border-green-200 rounded-lg p-4 mt-6 hidden">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="text-green-700 font-medium">Registration successful! Redirecting to events...</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form elements
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const registerFormElement = document.getElementById('registerFormElement');
+        const successMessage = document.getElementById('successMessage');
+
+        // Toggle buttons
+        const showRegisterForm = document.getElementById('showRegisterForm');
+        const showLoginForm = document.getElementById('showLoginForm');
+
+        // Password toggle buttons
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+        // Send code button
+        const sendCodeBtn = document.getElementById('sendCodeBtn');
+
+        // Initialize the page
+        function init() {
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Form toggles
+            showRegisterForm.addEventListener('click', () => toggleForms('register'));
+            showLoginForm.addEventListener('click', () => toggleForms('login'));
+
+            // Password toggles
+            toggleLoginPassword.addEventListener('click', () => togglePassword('loginPassword'));
+            toggleRegisterPassword.addEventListener('click', () => togglePassword('registerPassword'));
+            toggleConfirmPassword.addEventListener('click', () => togglePassword('confirmPassword'));
+
+            // Form submissions
+            loginFormElement.addEventListener('submit', handleLogin);
+            registerFormElement.addEventListener('submit', handleRegistration);
+
+            // Send code button
+            sendCodeBtn.addEventListener('click', handleSendCode);
+
+            // Password strength indicator
+            document.getElementById('registerPassword').addEventListener('input', updatePasswordStrength);
+
+            // Email validation on input
+            document.getElementById('loginEmail').addEventListener('blur', () => validateEmail('loginEmail'));
+            document.getElementById('registerEmail').addEventListener('blur', () => validateEmail('registerEmail'));
+        }
+
+        // Toggle between login and register forms
+        function toggleForms(form) {
+            if (form === 'register') {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                registerForm.classList.add('fade-in');
+            } else {
+                registerForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                loginForm.classList.add('fade-in');
+            }
+            
+            // Clear all errors
+            clearAllErrors();
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(`toggle${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                    </svg>
+                `;
+            } else {
+                input.type = 'password';
+                button.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                `;
+            }
+        }
+
+        // Validate email format
+        function validateEmail(inputId) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(`${inputId}Error`);
+            const email = input.value.trim();
+            
+            if (email && !email.endsWith('@wustl.edu')) {
+                showError(inputId, 'Email must end with @wustl.edu');
+                return false;
+            } else {
+                hideError(inputId);
+                return true;
+            }
+        }
+
+        // Show error message
+        function showError(inputId, message) {
+            const errorElement = document.getElementById(`${inputId}Error`);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            document.getElementById(inputId).classList.add('border-red-500');
+        }
+
+        // Hide error message
+        function hideError(inputId) {
+            const errorElement = document.getElementById(`${inputId}Error`);
+            errorElement.classList.add('hidden');
+            document.getElementById(inputId).classList.remove('border-red-500');
+        }
+
+        // Clear all errors
+        function clearAllErrors() {
+            const errorElements = document.querySelectorAll('[id$="Error"]');
+            errorElements.forEach(element => {
+                element.classList.add('hidden');
+            });
+            
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.classList.remove('border-red-500');
+            });
+        }
+
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validate email
+            if (!validateEmail('loginEmail')) {
+                return;
+            }
+            
+            // Validate password
+            if (!password) {
+                showError('loginPassword', 'Password is required');
+                return;
+            }
+            
+            // Simulate login (in real app, this would be an API call)
+            console.log('Login attempt:', { email, password });
+            
+            // Show success and redirect
+            setTimeout(() => {
+                window.location.href = 'eventlist.html';
+            }, 1000);
+        }
+
+        // Handle registration form submission
+        function handleRegistration(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value.trim();
+            const verificationCode = document.getElementById('verificationCode').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validate email
+            if (!validateEmail('registerEmail')) {
+                return;
+            }
+            
+            // Validate verification code
+            if (!verificationCode || verificationCode.length !== 6) {
+                showError('verificationCode', 'Please enter a valid 6-digit verification code');
+                return;
+            }
+            
+            // Validate password
+            if (!password) {
+                showError('registerPassword', 'Password is required');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showError('registerPassword', 'Password must be at least 8 characters long');
+                return;
+            }
+            
+            // Validate password confirmation
+            if (password !== confirmPassword) {
+                showError('confirmPassword', 'Passwords do not match');
+                return;
+            }
+            
+            // Simulate registration (in real app, this would be an API call)
+            console.log('Registration attempt:', { email, verificationCode, password });
+            
+            // Show success message
+            successMessage.classList.remove('hidden');
+            successMessage.classList.add('success-message');
+            
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = 'eventlist.html';
+            }, 2000);
+        }
+
+        // Handle send code button
+        function handleSendCode() {
+            const email = document.getElementById('registerEmail').value.trim();
+            
+            if (!validateEmail('registerEmail')) {
+                return;
+            }
+            
+            // Simulate sending verification code
+            sendCodeBtn.textContent = 'Code Sent!';
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+            
+            // Reset button after 30 seconds
+            setTimeout(() => {
+                sendCodeBtn.textContent = 'Send Code';
+                sendCodeBtn.disabled = false;
+                sendCodeBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            }, 30000);
+        }
+
+        // Update password strength indicator
+        function updatePasswordStrength() {
+            const password = document.getElementById('registerPassword').value;
+            const strengthBars = document.querySelectorAll('.password-strength');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            // Reset all bars
+            strengthBars.forEach(bar => {
+                bar.className = 'password-strength flex-1 bg-gray-200';
+            });
+            
+            if (password.length === 0) {
+                strengthText.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            let strengthClass = '';
+            let strengthLabel = '';
+            
+            // Check password criteria
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            // Determine strength level
+            if (strength <= 2) {
+                strengthClass = 'strength-weak';
+                strengthLabel = 'Weak';
+            } else if (strength === 3) {
+                strengthClass = 'strength-fair';
+                strengthLabel = 'Fair';
+            } else if (strength === 4) {
+                strengthClass = 'strength-good';
+                strengthLabel = 'Good';
+            } else {
+                strengthClass = 'strength-strong';
+                strengthLabel = 'Strong';
+            }
+            
+            // Update visual indicator
+            for (let i = 0; i < Math.min(strength, 4); i++) {
+                strengthBars[i].className = `password-strength flex-1 ${strengthClass}`;
+            }
+            
+            strengthText.textContent = `Password strength: ${strengthLabel}`;
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

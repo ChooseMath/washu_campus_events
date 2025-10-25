@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - WashU Campus Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'washu-red': '#BA0C2F',
+                        'washu-green': '#215732',
+                        'washu-gray': '#3D3D3D',
+                        'washu-tan': '#E1C4AC'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gothic-pattern {
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        
+        .event-image {
+            transition: all 0.3s ease;
+        }
+        
+        .event-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .register-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(186, 12, 47, 0.3);
+        }
+        
+        .secondary-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .secondary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .registered-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header Section -->
+    <header class="bg-washu-red text-white py-6 relative overflow-hidden">
+        <div class="gothic-pattern absolute inset-0 opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex justify-between items-center">
+                <button 
+                    onclick="window.location.href='eventlist.html'"
+                    class="flex items-center space-x-2 text-white hover:text-gray-200 transition-colors"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span>Back to Events</span>
+                </button>
+                <h1 class="text-xl font-bold">Event Details</h1>
+                <div class="w-20"></div> <!-- Spacer for centering -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Event Cover Image -->
+        <div class="mb-8">
+            <img 
+                id="eventImage"
+                src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=300&fit=crop"
+                alt="Event cover image"
+                class="w-full h-72 object-cover rounded-lg shadow-lg event-image"
+            >
+        </div>
+
+        <!-- Event Information -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <!-- Event Title -->
+            <h1 id="eventTitle" class="text-3xl md:text-4xl font-bold text-washu-red mb-6">
+                Basketball Pickup Game
+            </h1>
+
+            <!-- Event Details Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Location -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-washu-red rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Location</div>
+                        <div id="eventLocation" class="font-medium text-gray-900">Athletic Complex</div>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-washu-red rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Date</div>
+                        <div id="eventDate" class="font-medium text-gray-900">Oct 28, 2025</div>
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-washu-red rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Time</div>
+                        <div id="eventTime" class="font-medium text-gray-900">6:00 PM</div>
+                    </div>
+                </div>
+
+                <!-- Capacity -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-washu-red rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Capacity</div>
+                        <div id="eventCapacity" class="font-medium text-gray-900">15/25 registered</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Tags -->
+            <div class="mb-6">
+                <span id="eventCategory" class="inline-block bg-washu-red text-white px-4 py-2 rounded-full text-sm font-medium">
+                    Sports & Recreation
+                </span>
+            </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-washu-gray mb-4">Event Description</h2>
+            <p id="eventDescription" class="text-gray-700 leading-relaxed">
+                Join fellow students for an evening of basketball at the Athletic Complex. All skill levels welcome! 
+                We'll have multiple games running simultaneously to accommodate different skill levels. 
+                Bring your A-game and make some new friends on the court. Equipment will be provided, 
+                but feel free to bring your own basketball if you prefer.
+            </p>
+        </div>
+
+        <!-- Organizer Contact Section -->
+        <div id="organizerSection" class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-washu-gray mb-4">Organizer Information</h2>
+            
+            <!-- Not Registered View -->
+            <div id="notRegisteredView">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <span class="text-yellow-700 font-medium">Register to view organizer contact</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registered View -->
+            <div id="registeredView" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-washu-green rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Phone</div>
+                            <div class="font-medium text-gray-900">(314) 555-0123</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-washu-green rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Email</div>
+                            <div class="font-medium text-gray-900">organizer@wustl.edu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <!-- Not Registered Buttons -->
+            <div id="notRegisteredButtons" class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button 
+                    id="registerBtn"
+                    class="register-btn w-full sm:w-auto px-8 py-4 bg-washu-red text-white rounded-lg font-bold text-lg hover:bg-red-700 shadow-lg"
+                >
+                    Register for Event
+                </button>
+                <button 
+                    onclick="window.location.href='eventlist.html'"
+                    class="secondary-btn w-full sm:w-auto px-8 py-4 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 shadow-lg"
+                >
+                    Back to Events
+                </button>
+            </div>
+
+            <!-- Registered Buttons -->
+            <div id="registeredButtons" class="hidden flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex items-center space-x-3">
+                    <div class="registered-badge px-4 py-2 rounded-full text-white font-medium">
+                        ✓ Registered
+                    </div>
+                </div>
+                <button 
+                    id="cancelRegistrationBtn"
+                    class="secondary-btn w-full sm:w-auto px-8 py-4 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 shadow-lg"
+                >
+                    Cancel Registration
+                </button>
+                <button 
+                    onclick="window.location.href='eventlist.html'"
+                    class="secondary-btn w-full sm:w-auto px-8 py-4 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 shadow-lg"
+                >
+                    Back to Events
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Event data (in a real app, this would come from URL parameters or API)
+        const eventData = {
+            id: 1,
+            title: "Basketball Pickup Game",
+            category: "Sports & Recreation",
+            location: "Athletic Complex",
+            date: "Oct 28, 2025",
+            time: "6:00 PM",
+            capacity: "15/25",
+            image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=300&fit=crop",
+            description: "Join fellow students for an evening of basketball at the Athletic Complex. All skill levels welcome! We'll have multiple games running simultaneously to accommodate different skill levels. Bring your A-game and make some new friends on the court. Equipment will be provided, but feel free to bring your own basketball if you prefer.",
+            organizer: {
+                phone: "(314) 555-0123",
+                email: "organizer@wustl.edu"
+            }
+        };
+
+        // User registration status (in a real app, this would come from authentication)
+        let isRegistered = false; // Change this to true to test registered user view
+
+        // Initialize the page
+        function init() {
+            loadEventData();
+            updateUI();
+            setupEventListeners();
+        }
+
+        // Load event data into the page
+        function loadEventData() {
+            document.getElementById('eventTitle').textContent = eventData.title;
+            document.getElementById('eventLocation').textContent = eventData.location;
+            document.getElementById('eventDate').textContent = eventData.date;
+            document.getElementById('eventTime').textContent = eventData.time;
+            document.getElementById('eventCapacity').textContent = eventData.capacity;
+            document.getElementById('eventCategory').textContent = eventData.category;
+            document.getElementById('eventDescription').textContent = eventData.description;
+            document.getElementById('eventImage').src = eventData.image;
+        }
+
+        // Update UI based on registration status
+        function updateUI() {
+            const notRegisteredView = document.getElementById('notRegisteredView');
+            const registeredView = document.getElementById('registeredView');
+            const notRegisteredButtons = document.getElementById('notRegisteredButtons');
+            const registeredButtons = document.getElementById('registeredButtons');
+
+            if (isRegistered) {
+                // Show registered user view
+                notRegisteredView.classList.add('hidden');
+                registeredView.classList.remove('hidden');
+                notRegisteredButtons.classList.add('hidden');
+                registeredButtons.classList.remove('hidden');
+            } else {
+                // Show not registered view
+                notRegisteredView.classList.remove('hidden');
+                registeredView.classList.add('hidden');
+                notRegisteredButtons.classList.remove('hidden');
+                registeredButtons.classList.add('hidden');
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            document.getElementById('registerBtn').addEventListener('click', handleRegister);
+            document.getElementById('cancelRegistrationBtn').addEventListener('click', handleCancelRegistration);
+        }
+
+        // Handle registration
+        function handleRegister() {
+            // Simulate registration process
+            console.log('Registering for event:', eventData.id);
+            
+            // Update registration status
+            isRegistered = true;
+            updateUI();
+            
+            // Show success message
+            showSuccessMessage('Successfully registered for the event!');
+        }
+
+        // Handle cancel registration
+        function handleCancelRegistration() {
+            if (confirm('Are you sure you want to cancel your registration?')) {
+                // Simulate cancellation process
+                console.log('Cancelling registration for event:', eventData.id);
+                
+                // Update registration status
+                isRegistered = false;
+                updateUI();
+                
+                // Show success message
+                showSuccessMessage('Registration cancelled successfully.');
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            // Create temporary success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in';
+            successDiv.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
