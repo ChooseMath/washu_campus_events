@@ -1,4 +1,4 @@
-# WashU Campus Events Platform 🐻
+# WashU Campus Events Platform-WashU ESpace 🐻
 
 A responsive web application for Washington University students to discover, search, and engage with campus activities.
 
